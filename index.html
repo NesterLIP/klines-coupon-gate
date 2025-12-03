@@ -1,14 +1,104 @@
-<script>
-  window.onload = function () {
-    var formUrl = "PASTE_YOUR_GOOGLE_FORM_LINK_HERE";
-    var now = new Date();
-    var hour = now.getHours();
-    var isOpen = (hour >= 17 && hour < 22);
-
-    if (isOpen) {
-      window.location.href = formUrl;
-    } else {
-      document.getElementById("card").style.display = "block";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kline’s Kids Cone Coupon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      background: #f7f7f7;
     }
-  };
-</script>
+    .card {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 24px 20px 28px;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.4rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    p {
+      line-height: 1.5;
+      margin: 0.35rem 0;
+    }
+    .hours {
+      font-weight: 600;
+      margin-top: 0.4rem;
+    }
+    .small {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.8rem;
+    }
+    .debug {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 0.6rem;
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      // 👉 Put your LIVE Google Form link between the quotes below:
+      var formUrl = "https://docs.google.com/forms/d/12345-your-form-id-here/viewform";
+
+      var now = new Date();
+      var hour = now.getHours(); // 0–23
+
+      // Show current hour for debugging
+      var debugEl = document.getElementById("debug");
+      debugEl.textContent = "Current hour (0-23): " + hour;
+
+      // Basic check that formUrl looks like a real link
+      if (!formUrl || formUrl.indexOf("http") !== 0) {
+        document.getElementById("card").style.display = "block";
+        document.getElementById("status").textContent =
+          "Form URL is not configured correctly. Please update the page settings.";
+        return;
+      }
+
+      // Allowed window: 17:00 (5 PM) <= time < 22:00 (10 PM)
+      var isOpen = (hour >= 17 && hour < 22);
+
+      if (isOpen) {
+        // Redirect to the form if within allowed hours
+        window.location.href = formUrl;
+      } else {
+        // Show the “closed” message
+        document.getElementById("card").style.display = "block";
+        document.getElementById("status").textContent =
+          "Our coupon form is closed right now.";
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="card" class="card" style="display:none;">
+    <h1>Kline’s Kids Cone Coupon</h1>
+    <h2 id="status">Our coupon form is closed right now.</h2>
+    <p>
+      This offer is only available between:
+    </p>
+    <p class="hours">
+      5:00 PM and 10:00 PM (local time)
+    </p>
+    <p>
+      Please come back during those hours to claim your free kids cone coupon.
+    </p>
+    <p class="small">
+      Thanks for visiting Lights in the Park and for supporting Kline’s!
+    </p>
+    <p id="debug" class="debug"></p>
+  </div>
+</body>
+</html>
+
